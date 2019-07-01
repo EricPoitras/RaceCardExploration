@@ -1,0 +1,219 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+      
+      <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script type="text/javascript">
+      google.charts.load('current', {
+        'packages':['geochart'],
+        // Note: you will need to get a mapsApiKey for your project.
+        // See: https://developers.google.com/chart/interactive/docs/basic_load_libs#load-settings
+        'mapsApiKey': 'AIzaSyD-9tSrke72PouQMnMX-a7eZSW0jkFMBWY'
+      });
+      google.charts.setOnLoadCallback(drawRegionsMap);
+
+      function drawRegionsMap() {
+        var data = google.visualization.arrayToDataTable([
+          ['State', 'Stats'],
+['Alabama', 1],
+['Alaska', 1],
+['Arizona', 1],
+['Arkansas', 1],
+['California', 1],
+['Colorado', 1],
+['Connecticut', 1],
+['Delaware', 1],
+['Florida', 1],
+['Georgia', 1],
+['Hawaii', 1],
+['Idaho', 1],
+['Illinois', 1],
+['Indiana', 1],
+['Iowa', 1],
+['Kansas', 1],
+['Kentucky', 1],
+['Louisiana', 1],
+['Maine', 1],
+['Maryland', 1],
+['Massachusetts', 1],
+['Michigan', 1],
+['Minnesota', 1],
+['Mississippi', 1],
+['Missouri', 1],
+['Montana', 1],
+['Nebraska', 1],
+['Nevada', 1],
+['New Hampshire', 1],
+['New Jersey', 1],
+['New Mexico', 1],
+['New York', 1],
+['North Carolina', 1],
+['North Dakota', 1],
+['Ohio', 1],
+['Oklahoma', 1],
+['Oregon', 1],
+['Pennsylvania', 1],
+['Rhode Island', 1],
+['South Carolina', 1],
+['South Dakota', 1],
+['Tennessee', 1],
+['Texas', 1],
+['Utah', 100],
+['Vermont', 1],
+['Virginia', 1],
+['Washington', 1],
+['West Virginia', 1],
+['Wisconsin', 1],
+['Wyoming', 1]
+        ]);
+
+        var options = {region: "US", resolution: "provinces", width: "100%", height: "auto",colorAxis: {colors: ['#4ABDAC', '#DFDCE3', '#BD6B4A']},
+          backgroundColor: 'transparent',
+          datalessRegionColor: '#f5f5f5',
+          defaultColor: '#f5f5f5',};
+
+        var chart = new google.visualization.GeoChart(document.getElementById('regions_div'));
+          
+        google.visualization.events.addListener(chart, 'select', function () {
+      for (var i = 0; i < data.getNumberOfRows(); i++) {
+        if (i === chart.getSelection()[0].row) {
+          //data.setValue(i, 1, 100);
+            console.log(data.getValue(i,0));
+            document.getElementById("message").innerHTML = data.getValue(i,0);
+            document.getElementById("value").innerHTML = data.getValue(i,1);
+        } else {
+          //data.setValue(i, 1, 0);
+            //console.log(data.getValue(i,0));
+        }
+      }
+      chart.draw(data, options);
+    });
+
+        chart.draw(data, options);
+      }
+    </script>
+      
+    <script type="text/javascript">
+      google.charts.load("current", {packages:["corechart"]});
+      google.charts.setOnLoadCallback(drawChart);
+      function drawChart() {
+        var data = google.visualization.arrayToDataTable([
+          ['Sentiment', 'Count'],
+          ['Positive',     11],
+          ['Negative',      20],
+        ]);
+
+        var options = {
+            width: "100%",
+          pieHole: 0.4,
+          fontSize: 14,
+            legend: 'bottom',
+            pieSliceTextStyle: {
+            color: 'black',
+          }
+        };
+
+        var chart = new google.visualization.PieChart(document.getElementById('donutchart'));
+        chart.draw(data, options);
+      }
+    </script>
+      
+      <script type="text/javascript">
+      google.charts.load('current', {'packages':['treemap']});
+      google.charts.setOnLoadCallback(drawChart);
+      function drawChart() {
+        var data = google.visualization.arrayToDataTable([
+          ['Location', 'Parent', 'Market trade volume (size)', 'Market increase/decrease (color)'],
+          ['Global',    null,                 0,                               0],
+          ['America',   'Global',             0,                               0],
+          ['Europe',    'Global',             0,                               0],
+          ['Asia',      'Global',             0,                               0],
+          ['Australia', 'Global',             0,                               0],
+          ['Africa',    'Global',             0,                               0],
+          ['Brazil',    'America',            11,                              10],
+          ['USA',       'America',            52,                              31],
+          ['Mexico',    'America',            24,                              12],
+          ['Canada',    'America',            16,                              -23],
+          ['France',    'Europe',             42,                              -11],
+          ['Germany',   'Europe',             31,                              -2],
+          ['Sweden',    'Europe',             22,                              -13],
+          ['Italy',     'Europe',             17,                              4],
+          ['UK',        'Europe',             21,                              -5],
+          ['China',     'Asia',               36,                              4],
+          ['Japan',     'Asia',               20,                              -12],
+          ['India',     'Asia',               40,                              63],
+          ['Laos',      'Asia',               4,                               34],
+          ['Mongolia',  'Asia',               1,                               -5],
+          ['Israel',    'Asia',               12,                              24],
+          ['Iran',      'Asia',               18,                              13],
+          ['Pakistan',  'Asia',               11,                              -52],
+          ['Egypt',     'Africa',             21,                              0],
+          ['S. Africa', 'Africa',             30,                              43],
+          ['Sudan',     'Africa',             12,                              2],
+          ['Congo',     'Africa',             10,                              12],
+          ['Zaire',     'Africa',             8,                               10]
+        ]);
+
+        tree = new google.visualization.TreeMap(document.getElementById('topicchart'));
+
+        tree.draw(data, {
+          minColor: '#4ABDAC',
+          midColor: '#DFDCE3',
+          maxColor: '#BD6B4A',
+          headerHeight: 15,
+          fontColor: 'black',
+          showScale: true
+        });
+
+      }
+    </script>
+
+    <title>Race Card Exploration</title>
+  </head>
+  <body>
+    <div class="container-fluid">
+        <div class="row" style="height:5vh;">
+            <div class="col bg-dark text-white">
+                <nav class="d-flex">
+                    <div>Logo</div>
+                    <div class="ml-auto">Nav</div>
+                </nav>
+            </div>
+        </div>
+        <div class="row" style="height:95vh;">
+            <div class="col-8" style=" background-color:#DFDCE3;">
+                <div id="regions_div" style="width: 100%; height: auto;"></div>
+                <p class="d-inline mt-3">Console: </p>
+                <p class="d-inline" id="message"></p>
+                <p class="d-inline" id="value"></p>
+                <h3>Race Card Exploration</h3>
+                <p>An interactive dashboard to illustrate posts about race. Visit the full project here: https://theracecardproject.com/</p>
+            </div>
+            <div class="col-4 h-100" style="overflow-y:scroll;">
+                <h3 class="mt-3">Analytics</h3>
+                <h5 class="mt-2">Sentiment</h5>
+                <div id="donutchart" style="width: 100%; height: auto;"></div>
+                <h5 class="mt-2">Topic</h5>
+                <div id="topicchart" style="width: 100%; height: auto;"></div>
+                <h5 class="mt-2">Example</h5>
+                <p style="text-align:justify;">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer dapibus at dui ac finibus. In convallis urna vitae mauris sodales, vitae mollis mauris scelerisque. Donec in tellus sed ipsum dignissim finibus sit amet eu turpis. Mauris vulputate, tortor tristique consequat commodo, massa dolor varius tellus, hendrerit laoreet felis urna at turpis. Phasellus velit elit, tincidunt vel venenatis a, euismod nec eros. Duis ut tincidunt justo. Maecenas suscipit pretium ex, nec elementum mauris ultricies nec. Suspendisse potenti.</p>
+            </div>
+        </div>
+        
+    </div>
+
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+      
+    
+  </body>
+</html>
