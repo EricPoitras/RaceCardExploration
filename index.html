@@ -13,7 +13,11 @@
   integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
   crossorigin="anonymous"></script>
       
+     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.9.0/css/all.css"></link>
+      
     <script>
+        var selected_state;
+        
         var myJson = [
   ["MI","US-MI",2,3,6,0.110168182,0.067187273,0.058686364,0.183536364,0.060915455,0.121347273,0.080974545,0.317183636  ],
   ["CA","US-CA",0,3,2,0.1728,0.15722,0.170842,0.052852,0.1005,0.089166,0.149364,0.107254  ],
@@ -108,6 +112,10 @@
             console.log(data.getValue(i,0));
             document.getElementById("message").innerHTML = data.getValue(i,0);
             document.getElementById("value").innerHTML = data.getValue(i,1);
+            document.getElementById("state").innerHTML = data.getValue(i,0)+"("+data.getValue(i,1)+")";
+            selected_state = i;
+            drawPieChart();
+            drawBarChart();
         } else {
           //data.setValue(i, 1, 0);
             //console.log(data.getValue(i,0));
@@ -122,21 +130,24 @@
       
     <script type="text/javascript">
       google.charts.load("current", {packages:["corechart"]});
-      google.charts.setOnLoadCallback(drawChart);
-      function drawChart() {
+      google.charts.setOnLoadCallback(drawPieChart);
+      function drawPieChart() {
         var data = google.visualization.arrayToDataTable([
           ['Sentiment', 'Count'],
-          ['Positive',     11],
-          ['Negative',      20],
+          ['Positive', myJson[selected_state][3]],
+          ['Negative', myJson[selected_state][4]],
+          ['Neutral', myJson[selected_state][2]]
         ]);
 
         var options = {
             width: "100%",
           pieHole: 0.4,
           fontSize: 14,
-            legend: 'bottom',
+            pieSliceBorderColor: 'black',
+            legend: {position: 'bottom',textStyle: {color: 'white'}},
+            backgroundColor: '#343a40',
             pieSliceTextStyle: {
-            color: 'black',
+            color: 'white',
           }
         };
 
@@ -146,51 +157,46 @@
     </script>
       
       <script type="text/javascript">
-      google.charts.load('current', {'packages':['treemap']});
-      google.charts.setOnLoadCallback(drawChart);
-      function drawChart() {
+      google.charts.load('current', {'packages':['corechart']});
+      google.charts.setOnLoadCallback(drawBarChart);
+      function drawBarChart() {
         var data = google.visualization.arrayToDataTable([
-          ['Location', 'Parent', 'Market trade volume (size)', 'Market increase/decrease (color)'],
-          ['Global',    null,                 0,                               0],
-          ['America',   'Global',             0,                               0],
-          ['Europe',    'Global',             0,                               0],
-          ['Asia',      'Global',             0,                               0],
-          ['Australia', 'Global',             0,                               0],
-          ['Africa',    'Global',             0,                               0],
-          ['Brazil',    'America',            11,                              10],
-          ['USA',       'America',            52,                              31],
-          ['Mexico',    'America',            24,                              12],
-          ['Canada',    'America',            16,                              -23],
-          ['France',    'Europe',             42,                              -11],
-          ['Germany',   'Europe',             31,                              -2],
-          ['Sweden',    'Europe',             22,                              -13],
-          ['Italy',     'Europe',             17,                              4],
-          ['UK',        'Europe',             21,                              -5],
-          ['China',     'Asia',               36,                              4],
-          ['Japan',     'Asia',               20,                              -12],
-          ['India',     'Asia',               40,                              63],
-          ['Laos',      'Asia',               4,                               34],
-          ['Mongolia',  'Asia',               1,                               -5],
-          ['Israel',    'Asia',               12,                              24],
-          ['Iran',      'Asia',               18,                              13],
-          ['Pakistan',  'Asia',               11,                              -52],
-          ['Egypt',     'Africa',             21,                              0],
-          ['S. Africa', 'Africa',             30,                              43],
-          ['Sudan',     'Africa',             12,                              2],
-          ['Congo',     'Africa',             10,                              12],
-          ['Zaire',     'Africa',             8,                               10]
+          ['Topic', 'Probabilities'],
+          ['live', myJson[selected_state][5]],
+          ['look', myJson[selected_state][6]],
+          ['white,speak', myJson[selected_state][7]],
+          ['people', myJson[selected_state][8]],
+          ['black', myJson[selected_state][9]],
+          ['race', myJson[selected_state][10]],
+          ['white,life', myJson[selected_state][11]],
+          ['color', myJson[selected_state][12]]
         ]);
 
-        tree = new google.visualization.TreeMap(document.getElementById('topicchart'));
+        var options = {
+            //height: "600px",
+            //orientation: 'vertical',
+            width: "100%",
+          fontSize: 14,
+            hAxis:{
+                slantedText: false,
+                textStyle: {
+                    color: 'white'
+                }
+            },
+            vAxis:{
+                
+                textStyle: {
+                    color: 'white'
+                }
+            },
+            legend: {position: 'none',textStyle: {color: 'white'}},
+            backgroundColor: '#343a40'
+        };
+          
+        var view = new google.visualization.DataView(data);
 
-        tree.draw(data, {
-          minColor: '#4ABDAC',
-          midColor: '#DFDCE3',
-          maxColor: '#BD6B4A',
-          headerHeight: 15,
-          fontColor: 'black',
-          showScale: true
-        });
+        var chart = new google.visualization.ColumnChart(document.getElementById("columnchart_values"));
+        chart.draw(view, options);
 
       }
     </script>
@@ -201,17 +207,22 @@
     <div class="container-fluid">
         <div class="row" style="height:5vh;">
             <div class="col bg-dark text-white">
-                <nav class="d-flex">
-                    <div>Logo</div>
-                    <div class="ml-auto">Nav</div>
+                <nav class="d-flex mt-1">
+                    <div>
+                        <img src="logo/logo@288x.png" width="30" height="30" alt="">
+                        <h6 class="d-inline">Race Card Exploration</h6>
+                    </div>
+                    <div class="ml-auto">
+                        <a href="https://theracecardproject.com/" target="_blank">The Race Card Project</a>
+                    </div>
                 </nav>
             </div>
         </div>
         <div class="row" style="height:95vh;">
-            <div class="col-8" style="background-color:#DFDCE3;">
+            <div class="col-7 bg-dark text-white">
                 <!-- Example single danger button -->
                 <div class="btn-group" style="left: calc(50% - 45px);">
-                  <button id="button_sentiment" type="button" class="btn btn-secondary dropdown-toggle mt-3" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  <button id="button_sentiment" type="button" class="btn btn-outline-light dropdown-toggle mt-3" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     Sentiment
                   </button>
                   <div class="dropdown-menu">
@@ -221,20 +232,18 @@
                   </div>
                 </div>
                 <div id="regions_div" style="width: 100%; height: auto;"></div>
-                <p class="d-inline mt-3">Console: </p>
-                <p class="d-inline" id="message"></p>
-                <p class="d-inline" id="value"></p>
+                <p class="d-none mt-3">Console: </p>
+                <p class="d-none" id="message"></p>
+                <p class="d-none" id="value"></p>
             </div>
-            <div class="col-4 h-100" style="overflow-y:scroll;">
-                <h3>Race Card Exploration</h3>
-                <p>An interactive dashboard to illustrate posts about race. Visit the full project here: https://theracecardproject.com/</p>
-                <h3 class="mt-3">Analytics</h3>
-                <h5 class="mt-2">Sentiment</h5>
+            <div class="col-5 h-100 bg-dark text-white" style="overflow-y:scroll;border-left:1px solid lightgray;">
+                <h3 id="state" class="mt-3">Analytics</h3>
+                <i class="fas fa-question-circle mr-2"></i><h5 class="d-inline mt-3">Sentiment</h5> 
                 <div id="donutchart" style="width: 100%; height: auto;"></div>
-                <h5 class="mt-2">Topic</h5>
-                <div id="topicchart" style="width: 100%; height: auto;"></div>
-                <h5 class="mt-2">Wordcloud (Topic)</h5>
-                <p style="text-align:justify;">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer dapibus at dui ac finibus. In convallis urna vitae mauris sodales, vitae mollis mauris scelerisque. Donec in tellus sed ipsum dignissim finibus sit amet eu turpis. Mauris vulputate, tortor tristique consequat commodo, massa dolor varius tellus, hendrerit laoreet felis urna at turpis. Phasellus velit elit, tincidunt vel venenatis a, euismod nec eros. Duis ut tincidunt justo. Maecenas suscipit pretium ex, nec elementum mauris ultricies nec. Suspendisse potenti.</p>
+                <i class="fas fa-question-circle mr-2"></i><h5 class="d-inline mt-3">Topic</h5>
+                <div id="columnchart_values" style="width: 100%; height: auto;"></div>
+                <i class="fas fa-question-circle mr-2"></i><h5 class="d-inline mt-3">Wordcloud</h5>
+                <img src="images/BigML-TopicModel-5d1bcb19eba31d6a950000e6_black%20(1).svg" width="100%" height="auto">
             </div>
         </div>
         
